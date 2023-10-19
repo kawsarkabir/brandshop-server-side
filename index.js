@@ -31,19 +31,36 @@ async function run() {
     const brandCollection = client.db("brandShopDB").collection("brand");
 
     // create a new user
-    app.post('/user', async(req, res)=>{
-        const newUser = req.body;
-        console.log(newUser);
-        res.send(await userCollection.insertOne(newUser));
-    })
+    app.post("/user", async (req, res) => {
+      const newUser = req.body;
+      res.send(await userCollection.insertOne(newUser));
+    });
 
     // get data in database with get method
     app.get("/user", async (req, res) => {
-        res.send(await userCollection.find().toArray());
+      res.send(await userCollection.find().toArray());
+    });
+
+    // add brand items 
+    app.post("/addbrand", async (req, res) => {
+        const newBrand = req.body;
+        res.send(await brandCollection.insertOne(newBrand));
       });
+     
+    // get brand data
+    app.get("/addbrand", async (req, res) => {
+        res.send(await brandCollection.find().toArray());
+      });
+    
 
-
-
+    // add products items
+    app.post("/addproducts", async (req, res) => {
+      const newProducts = req.body;
+      res.send(await productCollection.insertOne(newProducts));
+    });
+    app.get("/addproducts", async (req, res) => {
+      res.send(await productCollection.find().toArray());
+    });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });

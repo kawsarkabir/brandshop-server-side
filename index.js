@@ -29,6 +29,7 @@ async function run() {
     const userCollection = client.db("brandShopDB").collection("user");
     const productCollection = client.db("brandShopDB").collection("product");
     const brandCollection = client.db("brandShopDB").collection("brand");
+    const myCartCollection = client.db("brandShopDB").collection("mycart");
 
     // create a new user
     app.post("/user", async (req, res) => {
@@ -112,6 +113,25 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       res.send(await productCollection.deleteOne(query));
+    });
+
+    // my cart crud operation 
+    app.post("/mycart", async (req, res) => {
+      const product = req.body;
+      console.log(product);
+      res.send(await myCartCollection.insertOne(product));
+    });
+
+    app.get("/mycart", async (req, res) => {
+      const cursor = myCartCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/mycart/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      res.send(await myCartCollection.findOne(query));
     });
 
     // Send a ping to confirm a successful connection

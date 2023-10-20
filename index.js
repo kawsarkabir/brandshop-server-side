@@ -66,6 +66,22 @@ async function run() {
       res.send(await brandCollection.deleteOne(query));
     });
 
+    app.put("/brand/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedBrand = req.body;
+      console.log(updatedBrand);
+      const updatebrand = {
+        $set: {
+          brandName: updatedBrand.brandName,
+          brandURL: updatedBrand.brandURL,
+        },
+      };
+
+      res.send(await brandCollection.updateOne(query, updatebrand, options));
+    });
+
     // all product CRUD here
     app.post("/products", async (req, res) => {
       const product = req.body;
@@ -89,18 +105,14 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const options = { upsert: true };
       const updatedProduct = req.body;
-      console.log(updatedProduct);
       const updateproduct = {
         $set: {
           productName: updatedProduct.productName,
-          brandName: updatedProduct.brandName,
-          productCat: updatedProduct.productCat,
-          productPrice: updatedProduct.productPrice,
-          productRating: updatedProduct.productRating,
-          productImage: updatedProduct.productImage,
-          productDescription: updatedProduct.productDescription,
-          productFeatured: updatedProduct.productFeatured,
-          productHotSale: updatedProduct.productHotSale,
+          category: updatedProduct.category,
+          price: updatedProduct.price,
+          rating: updatedProduct.rating,
+          details: updatedProduct.details,
+          photoURL: updatedProduct.photoURL,
         },
       };
 
@@ -115,7 +127,7 @@ async function run() {
       res.send(await productCollection.deleteOne(query));
     });
 
-    // my cart crud operation 
+    // my cart crud operation
     app.post("/mycart", async (req, res) => {
       const product = req.body;
       console.log(product);

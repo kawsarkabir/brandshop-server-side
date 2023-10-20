@@ -24,7 +24,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const userCollection = client.db("brandShopDB").collection("user");
     const productCollection = client.db("brandShopDB").collection("product");
@@ -132,6 +132,12 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       res.send(await myCartCollection.findOne(query));
+    });
+
+    app.delete("/mycart/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      res.send(await myCartCollection.deleteOne(query));
     });
 
     // Send a ping to confirm a successful connection

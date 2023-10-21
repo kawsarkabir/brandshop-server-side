@@ -29,6 +29,7 @@ async function run() {
     const userCollection = client.db("brandShopDB").collection("user");
     const productCollection = client.db("brandShopDB").collection("product");
     const brandCollection = client.db("brandShopDB").collection("brand");
+    const sliderCollection = client.db("brandShopDB").collection("slider");
     const myCartCollection = client.db("brandShopDB").collection("mycart");
 
     // create a new user
@@ -125,6 +126,18 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       res.send(await productCollection.deleteOne(query));
+    });
+
+    // slider all operation here
+    app.post("/productbaseslider", async (req, res) => {
+      const product = req.body;
+      res.send(await sliderCollection.insertOne(product));
+    });
+
+    app.get("/productbaseslider", async (req, res) => {
+      const cursor = sliderCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
     });
 
     // my cart crud operation
